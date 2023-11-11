@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Member extends Model
 {
     protected $fillable = [
-		'name', 'type', 'gender', 'tgl_lahir', 'tempat_lahir', 'alamat', 'tgl_pernikahan', 'phone', 'active', 'member_id', 'district_id',
+		'name', 'type', 'gender', 'tgl_lahir', 'tempat_lahir', 'alamat', 'tgl_pernikahan', 'phone', 'active', 'member_id', 'district_id', 'photo',
     ];
 
     public function parent_member()

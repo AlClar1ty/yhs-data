@@ -34,7 +34,7 @@
     </nav>
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <form action="{{ route('store') }}" method="POST">
+            <form action="{{ route('store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="card my-1">
                     <div class="card-header">
@@ -223,6 +223,19 @@
                                         <input type="date" class="form-control" id="anak_tgl_lahir_3" name="anak_tgl_lahir[]" placeholder="Tanggal Lahir">
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card my-1">
+                    <div class="card-header">
+                        <h5 class="text-center font-weight-bold m-0">Foto Keluarga</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="form-group col-12">
+                                <label for="photo">Upload Foto</label>
+                                <input type="file" class="form-control" id="photo" name="photo" placeholder="Upload Foto" accept="image/*">
                             </div>
                         </div>
                     </div>

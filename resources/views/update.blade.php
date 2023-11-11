@@ -21,6 +21,10 @@
         .select2-selection__arrow{
             margin-top: 0.3em;
         }
+
+        .img-container:hover {
+            opacity: 0.6;
+        }
     </style>
 @endsection
 
@@ -34,7 +38,7 @@
     </nav>
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <form action="{{ route('update') }}" method="POST">
+            <form action="{{ route('update') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="id" value="{{ $dataNya['id'] }}">
                 <div class="card my-1">
@@ -227,6 +231,31 @@
                                     <div class="form-group col-md-6 col-12">
                                         <label for="anak_tgl_lahir_3">Tanggal Lahir Anak 3</label>
                                         <input type="date" class="form-control" id="anak_tgl_lahir_3" name="anak_tgl_lahir[]" placeholder="Tanggal Lahir" value="{{ isset($childNya->where('type', 'anak')[3]) ? $childNya->where('type', 'anak')[3]['tgl_lahir'] : "" }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card my-1">
+                    <div class="card-header">
+                        <h5 class="text-center font-weight-bold m-0">Foto Keluarga</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="form-group col-12">
+                                <label for="photo">Upload Foto</label>
+                                <input type="file" class="form-control" id="photo" name="photo" placeholder="Upload Foto" accept="image/*">
+                            </div>
+                            <div class="col" style="border: solid lightgrey 1px; border-radius: 1em; padding: 1em; margin-left: 1em; margin-right: 1em;">
+                                <div class="row">
+                                    <div class="col-12 col-md-4">
+                                        <a class="img-container" href="{{ asset("sources/members/". $dataNya['photo']) }}" target="_blank">
+                                            <img src="{{ asset("sources/members/". $dataNya['photo']) }}" style="max-height: 12em;" alt="Current Photo">
+                                        </a>
+                                    </div>
+                                    <div class="col-12 col-md-8" style="display: table;">
+                                        <span class="font-weight-bold" style="display: table-cell; vertical-align: middle;">Foto Keluaga Saat Ini (Upload Foto Baru Untuk Mengganti Foto Saat Ini)</span>
                                     </div>
                                 </div>
                             </div>

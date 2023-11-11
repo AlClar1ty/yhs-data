@@ -5,6 +5,10 @@
     img{
         max-height: 2em;
     }
+
+    .img-container:hover {
+        opacity: 0.6;
+    }
   </style>
 @endsection
 
@@ -34,7 +38,7 @@
                         </div>
                         <br>
                         <div class="table-responsive">
-                            <table class="table table-bordered" style="width: 135em;">
+                            <table class="table table-bordered" style="width: 160em;">
                                 </thead>
                                 <thead style="background-color: aliceblue; font-weight: 800;">
                                     <tr>
@@ -46,6 +50,7 @@
                                         <td class="text-center" style="width: 18em">Anak 2</td>
                                         <td class="text-center" style="width: 18em">Anak 3</td>
                                         <td class="text-center" style="width: 25em">Alamat</td>
+                                        <td class="text-center" style="width: 25em">Foto</td>
                                         <td class="text-center" style="width: 10em">Edit/Delete</td>
                                     </tr>
                                 </thead>
@@ -138,6 +143,17 @@
                                                 }
                                             @endphp
                                             <td rowspan="4" style="vertical-align: middle; background-color: {{ $colorTable }};">{{ $parentNya->district_detail['province'] }}, {{ $parentNya->district_detail['city'] }}, {{ $parentNya->district_detail['subdistrict_name'] }} <br> {{ $parentNya['alamat'] }}</td>
+
+                                            <td rowspan="4" style="text-align: center; vertical-align: middle;">
+                                                @if($parentNya['photo'])
+                                                    <a class="img-container" href="{{ asset("sources/members/". $parentNya['photo']) }}" target="_blank">
+                                                        <img src="{{ asset("sources/members/". $parentNya['photo']) }}" style="max-height: 12em;">
+                                                    </a>
+                                                @else
+                                                    <h3>No Photo</h3>
+                                                @endif
+                                            </td>
+
                                             <td rowspan="4" style="vertical-align: middle; background-color: {{ $colorTable }};" class="text-center">
                                                 <a href="{{ route('edit', ['id' => $parentNya['id']]) }}">
                                                     <button class="btn btn-delete btn-sm">

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\File;
+use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\RajaOngkir_Subdistrict;
 use App\Member;
 
@@ -74,6 +77,23 @@ class MemberController extends Controller
 	    	}
 
 	    	$suami->member_id = $suami['id'];
+	    	if ($request->hasFile('photo')) {
+                $path = "sources/members";
+                $file = $request->file('photo');
+                $fileName = str_replace([' ', ':'], '', Carbon::now()->toDateTimeString()) . "_members." . $file->getClientOriginalExtension();
+
+                // Cek ada folder tidak
+                if (!is_dir($path)) {
+                    File::makeDirectory($path, 0777, true, true);
+                }
+
+                //compressed img
+                $compres = Image::make($file->getRealPath());
+                $compres->resize(720, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($path.'/'.$fileName);
+		    	$suami->photo = $fileName;
+            }
 	    	$suami->update();
 
             DB::commit();
@@ -109,7 +129,34 @@ class MemberController extends Controller
 		    	$data['tgl_pernikahan'] = $request->input('tgl_pernikahan');
 		    	$data['district_id'] = $request->input('district');
 		    	$data['alamat'] = $request->input('address');
+
+		    	if ($request->hasFile('photo')) {
+	                $path = "sources/members";
+	                $file = $request->file('photo');
+	                $fileName = str_replace([' ', ':'], '', Carbon::now()->toDateTimeString()) . "_members." . $file->getClientOriginalExtension();
+
+	                // Cek ada folder tidak
+	                if (!is_dir($path)) {
+	                    File::makeDirectory($path, 0777, true, true);
+	                }
+
+	                // Hapus Img Lama Jika Update Image
+                    if (isset($parentNya['photo'])) {
+                        if (File::exists("sources/members/" . $parentNya['photo'])) {
+                            File::delete("sources/members/" . $parentNya['photo']);
+                        }
+                    }
+
+	                //compressed img
+	                $compres = Image::make($file->getRealPath());
+	                $compres->resize(720, null, function ($constraint) {
+	                    $constraint->aspectRatio();
+	                })->save($path.'/'.$fileName);
+			    	$data['photo'] = $fileName;
+	            }
+
 		    	$parentNya->update($data);
+		    	$data['photo'] = null;
 
 		    	//untuk istri
 		    	$istri = $childNya->where('type', 'istri')->first();
