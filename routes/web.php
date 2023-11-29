@@ -12,6 +12,7 @@
 */
 
 Route::get('/', 'MemberController@index')->name('index');
+Route::get('/list', 'MemberController@index_new')->name('index_new');
 Route::get('/create', 'MemberController@create')->name('create');
 Route::post('/store', 'MemberController@store')->name('store');
 Route::get('/edit/{id}', 'MemberController@edit')->name('edit');

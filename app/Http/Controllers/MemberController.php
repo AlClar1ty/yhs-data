@@ -30,6 +30,21 @@ class MemberController extends Controller
         return view('welcome', compact('result', 'forMark', 'url'));
     }
 
+    public function index_new(Request $request){
+    	$url = $request->all();
+    	$members = Member::where('active', true);
+    	if($request->has('search')){
+    		if($request->input('search') != ""){
+	    		$members = $members->Where(function($q) use($request) {
+		                $q->Where('name', 'like', '%' . $request->input('search') . '%')
+		                    ->orWhere('phone', 'like', '%' . $request->input('search') . '%');
+		            });
+    		}
+        }
+    	$result = $members->paginate(10);
+        return view('list_member', compact('result', 'url'));
+    }
+
     public function create(){
     	$subDistricts = RajaOngkir_Subdistrict::whereIn('province_id', [9,10,11])->get();
         return view('add', compact('subDistricts'));
@@ -77,6 +92,50 @@ class MemberController extends Controller
 	    	}
 
 	    	$suami->member_id = $suami['id'];
+	    	if ($request->hasFile('photo')) {
+                $path = "sources/members";
+                $file = $request->file('photo');
+                $fileName = str_replace([' ', ':'], '', Carbon::now()->toDateTimeString()) . "_members." . $file->getClientOriginalExtension();
+
+                // Cek ada folder tidak
+                if (!is_dir($path)) {
+                    File::makeDirectory($path, 0777, true, true);
+                }
+
+                //compressed img
+                $compres = Image::make($file->getRealPath());
+                $compres->resize(720, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($path.'/'.$fileName);
+		    	$suami->photo = $fileName;
+            }
+	    	$suami->update();
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Status Order Berhasil Di Ubah');
+
+        } catch (\Exception $ex) {
+            DB::rollback();
+            return response()->json(['errors' => $ex->getMessage()]);
+        }
+    }
+
+    public function store_single(Request $request){
+    	DB::beginTransaction();
+
+        try{
+	    	//simpen data
+	    	$data['name'] = $request->input('name');
+	    	$data['type'] = "suami";
+	    	$data['gender'] = "pria";
+	    	$data['phone'] = $request->input('suami_phone');
+	    	$data['tempat_lahir'] = $request->input('suami_tmpt_lahir');
+	    	$data['tgl_lahir'] = $request->input('suami_tgl_lahir');
+	    	$data['tgl_pernikahan'] = $request->input('tgl_pernikahan');
+	    	$data['district_id'] = $request->input('district');
+	    	$data['alamat'] = $request->input('address');
+	    	$suami = Member::create($data);
+
 	    	if ($request->hasFile('photo')) {
                 $path = "sources/members";
                 $file = $request->file('photo');

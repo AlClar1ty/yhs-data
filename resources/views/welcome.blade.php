@@ -59,6 +59,9 @@
                                     @foreach ($result as $key => $value)
                                         @php
                                             $parentNya = $value->parent_member;
+                                            if(!isset($parentNya->child_member)){
+                                                continue;
+                                            }
                                             $childNya = $parentNya->child_member;
                                             $totAnak = 0;
                                             $isOdd++;

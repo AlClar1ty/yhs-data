@@ -79,23 +79,23 @@
                                 <div class="row">
                                     <div class="form-group col-md-6 col-12">
                                         <label for="istri_name">Nama Istri</label>
-                                        <input type="text" class="form-control" id="istri_name" name="istri_name" required="" placeholder="Nama">
+                                        <input type="text" class="form-control" id="istri_name" name="istri_name" placeholder="Nama">
                                     </div>
 
                                     <div class="form-group col-md-6 col-12">
                                         <label for="istri_phone">No. Telp Istri</label>
-                                        <input type="text" class="form-control" id="istri_phone" name="istri_phone" required="" placeholder="No. Telp">
+                                        <input type="text" class="form-control" id="istri_phone" name="istri_phone" placeholder="No. Telp">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-6 col-12">
                                         <label for="istri_tmpt_lahir">Tempat Lahir Istri</label>
-                                        <input type="text" class="form-control" id="istri_tmpt_lahir" name="istri_tmpt_lahir" required="" placeholder="Tempat Lahir">
+                                        <input type="text" class="form-control" id="istri_tmpt_lahir" name="istri_tmpt_lahir" placeholder="Tempat Lahir">
                                     </div>
 
                                     <div class="form-group col-md-6 col-12">
                                         <label for="istri_tgl_lahir">Tanggal Lahir Istri</label>
-                                        <input type="date" class="form-control" id="istri_tgl_lahir" name="istri_tgl_lahir" required="" placeholder="Tanggal Lahir">
+                                        <input type="date" class="form-control" id="istri_tgl_lahir" name="istri_tgl_lahir" placeholder="Tanggal Lahir">
                                     </div>
                                 </div>
                             </div>
@@ -111,7 +111,7 @@
                             <div class="col-12">
                                 <div class="form-group col-md-6 col-12">
                                     <label for="tgl_pernikahan">Tanggal Pernikahan</label>
-                                    <input type="date" class="form-control" id="tgl_pernikahan" required="" name="tgl_pernikahan">
+                                    <input type="date" class="form-control" id="tgl_pernikahan" name="tgl_pernikahan">
                                 </div>
 
                                 <div class="form-group">
