@@ -29,6 +29,13 @@
     <link rel="stylesheet" href="{{ asset('css/admin/tagsinput.css') }}">
     <link rel="stylesheet" href="{{ asset('css/mdi/css/materialdesignicons.min.css') }}">
 
+    <style type="text/css">
+        body{
+            background-image: url("{{ asset('sources/bgyhs.png') }}");
+            background-repeat: repeat;
+        }
+    </style>
+
     @yield('style')
 </head>
 <body>

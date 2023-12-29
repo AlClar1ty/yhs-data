@@ -9,11 +9,6 @@
     .img-container:hover {
         opacity: 0.6;
     }
-
-    body{
-        background-image: url("{{ asset('sources/bgyhs.png') }}");
-        background-repeat: repeat;
-    }
   </style>
 @endsection
 
@@ -24,6 +19,7 @@
             <div class="card">
                 <div class="card-header">
                     <h1 class="text-center font-weight-bold m-0" id="time"></h1>
+                    <h4 class="text-center m-0">Jumlah jemaat : {{ $totMembers }}</h4>
                 </div>
 
                 <div class="card-body">

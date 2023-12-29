@@ -15,6 +15,7 @@ class MemberController extends Controller
     public function index(Request $request){
     	$url = $request->all();
     	$members = Member::where('active', true);
+    	$totMembers = Member::where('active', true)->count();    	
     	$ultah = $members;
     	$married = $members;
         $forMark = [];
@@ -51,7 +52,7 @@ class MemberController extends Controller
     	$ultah = $ultah->whereDate('tgl_lahir', $date2morrow)->select('name', 'phone')->get();
     	$married = $married->whereDate('tgl_pernikahan', $date2morrow)->select('name', 'phone')->get();
 
-        return view('welcome', compact('result', 'forMark', 'url', 'ultah', 'married', 'date2morrow'));
+        return view('welcome', compact('result', 'forMark', 'url', 'ultah', 'married', 'date2morrow', 'totMembers'));
     }
 
     public function index_new(Request $request){
