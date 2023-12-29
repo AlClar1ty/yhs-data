@@ -20,25 +20,33 @@ class MemberController extends Controller
 
         //search
     	if($request->has('search-date')){
-    		if(!$request->input('search-date-type') != ""){
-		    	$search_date_m = date("m", strtotime($request->input('search-date')));
-		    	$search_date_d = date("d", strtotime($request->input('search-date')));
+    		if($request->input('search-date-type') == ""){
+    			if($request->input('search-date') != ""){
+    				$search_date_m = date("m", strtotime($request->input('search-date')));
+			    	$search_date_d = date("d", strtotime($request->input('search-date')));
 
-	    		$members = $members->Where(function($q) use($search_date_m, $search_date_d) {
-			                $q->whereDay('tgl_lahir', $search_date_d)
-			                    ->whereMonth('tgl_lahir', $search_date_m);
-			            })->orWhere(function($q) use($search_date_m, $search_date_d) {
-			                $q->whereDay('tgl_pernikahan', $search_date_d)
-			                    ->whereMonth('tgl_pernikahan', $search_date_m);
-			            });
+		    		$members = $members->Where(function($q) use($search_date_m, $search_date_d) {
+				                $q->whereDay('tgl_lahir', $search_date_d)
+				                    ->whereMonth('tgl_lahir', $search_date_m);
+				            })->orWhere(function($q) use($search_date_m, $search_date_d) {
+				                $q->whereDay('tgl_pernikahan', $search_date_d)
+				                    ->whereMonth('tgl_pernikahan', $search_date_m);
+				            });
+		        }
     		}
     		else{
-		    	$search_date_m = date("m", strtotime($request->input('search-date')));
-		    	$search_date_d = date("d", strtotime($request->input('search-date')));
-    			$members = $members->whereDay($request->input('search-date-type'), $search_date_d)->whereMonth($request->input('search-date-type'), $search_date_m);
+    			if($request->input('search-date') != ""){
+			    	$search_date_m = date("m", strtotime($request->input('search-date')));
+			    	$search_date_d = date("d", strtotime($request->input('search-date')));
+	    			$members = $members->whereDay($request->input('search-date-type'), $search_date_d)->whereMonth($request->input('search-date-type'), $search_date_m);
+    			}
     		}
     	}
-    	// dd($forMark);
+    	if($request->has('search_baptis')){
+    		if($request->input('search_baptis') != ""){
+	    		$members = $members->where('is_baptis', $request->input('search_baptis'));
+    		}
+        }
     	if($request->has('search')){
     		if($request->input('search') != ""){
 	    		$members = $members->orWhere(function($q) use($request) {
@@ -47,7 +55,7 @@ class MemberController extends Controller
 		            });
     		}
         }
-        if($request->has('search-date') || $request->has('search')){
+        if($request->has('search-date') || $request->has('search') || $request->has('search_baptis')){
 	        $tempMark = $members;
 	        $forMark = $tempMark->pluck('id');
         }

@@ -26,11 +26,19 @@
                     <div class="row mb-2 mx-2">   
                         <form id="searchForm" class="registration-form col-md-12" action="" method="GET">
                             <div class="row">
-                                <div class="form-group col-md-6 col-12">
+                                <div class="form-group col-md-4 col-12">
                                     <label for="search-name-phone">Search by Name & Phone</label>
                                     <input id="search-name-phone" type="text" class="form-control" name="search" value="{{ isset($_GET['search']) ? $_GET['search'] : '' }}" placeholder="by Name and Phone" aria-label="Recipient's username" aria-describedby="basic-addon2">
                                 </div>
-                                <div class="col-md-6 col-12">
+                                <div class="form-group col-md-3 col-12">
+                                    <label for="search-baptis">Status Baptis</label>
+                                    <select class="form-control" id="search-baptis" name="search_baptis" aria-label="" required="">
+                                        <option value="" selected="" disabled="">Pilih Baptis</option>
+                                        <option value="1" {{ isset($_GET['search_baptis']) ? ($_GET['search_baptis'] == 1 ? "selected" : "") : '' }}>Sudah</option>
+                                        <option value="0" {{ isset($_GET['search_baptis']) ? ($_GET['search_baptis'] == 0 ? "selected" : "") : '' }}>Belum Baptis</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-5 col-12">
                                     <label for="search-name-phone">Search by Birth/Marriage Date</label>
                                     <div class="input-group">
                                         <input type="hidden" name="search-date-type" id="search-date-type">
