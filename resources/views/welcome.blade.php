@@ -172,7 +172,7 @@
                                         $colorTable = "#ffffff";
                                     }
                                 @endphp
-                                <td rowspan="5" style="vertical-align: middle; background-color: {{ $colorTable }};">{{ $parentNya->district_detail['province'] }}, {{ $parentNya->district_detail['city'] }}, {{ $parentNya->district_detail['subdistrict_name'] }} <br> {{ $parentNya['alamat'] }}</td>
+                                <td rowspan="5" style="vertical-align: middle; background-color: {{ $colorTable }};"><a href="https://www.google.com/maps/search/?api=1&query={{ str_replace(" ", "+", $parentNya['alamat']) }}" target="_blank">{{ $parentNya->district_detail['province'] }}, {{ $parentNya->district_detail['city'] }}, {{ $parentNya->district_detail['subdistrict_name'] }} <br> {{ $parentNya['alamat'] }}</a></td>
 
                                 <td rowspan="5" style="text-align: center; vertical-align: middle;">
                                     @if($parentNya['photo'])
