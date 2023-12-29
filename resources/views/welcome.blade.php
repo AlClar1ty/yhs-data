@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="form-group col-md-3 col-12">
                                     <label for="search-baptis">Status Baptis</label>
-                                    <select class="form-control" id="search-baptis" name="search_baptis" aria-label="" required="">
+                                    <select class="form-control" id="search-baptis" name="search_baptis" aria-label="">
                                         <option value="" selected="" disabled="">Pilih Baptis</option>
                                         <option value="1" {{ isset($_GET['search_baptis']) ? ($_GET['search_baptis'] == 1 ? "selected" : "") : '' }}>Sudah</option>
                                         <option value="0" {{ isset($_GET['search_baptis']) ? ($_GET['search_baptis'] == 0 ? "selected" : "") : '' }}>Belum Baptis</option>
