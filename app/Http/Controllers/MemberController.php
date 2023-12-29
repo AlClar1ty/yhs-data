@@ -15,19 +15,43 @@ class MemberController extends Controller
     public function index(Request $request){
     	$url = $request->all();
     	$members = Member::where('active', true);
+    	$ultah = $members;
+    	$married = $members;
         $forMark = [];
+
+        //search
+    	if($request->has('search-date')){
+    		if(!$request->input('search-date-type') != ""){
+	    		$members = $members->Where(function($q) use($request) {
+		                $q->whereDate('tgl_lahir', $request->input('search-date'))
+		                    ->orWhereDate('tgl_pernikahan', $request->input('search-date'));
+		            });
+    		}
+    		else{
+    			$members = $members->whereDate($request->input('search-date-type'), $request->input('search-date'));
+    		}
+    	}
+    	// dd($forMark);
     	if($request->has('search')){
     		if($request->input('search') != ""){
-	    		$members = $members->Where(function($q) use($request) {
+	    		$members = $members->orWhere(function($q) use($request) {
 		                $q->Where('name', 'like', '%' . $request->input('search') . '%')
 		                    ->orWhere('phone', 'like', '%' . $request->input('search') . '%');
 		            });
-		        $forMark = $members;
-		        $forMark = $forMark->pluck('id');
     		}
         }
+        if($request->has('search-date') || $request->has('search')){
+	        $tempMark = $members;
+	        $forMark = $tempMark->pluck('id');
+        }
     	$result = $members->groupBy('member_id')->paginate(10);
-        return view('welcome', compact('result', 'forMark', 'url'));
+
+    	//khusus untuk ultah dan married
+    	$date2morrow = date("Y-m-d", strtotime("+2 days"));
+    	$ultah = $ultah->whereDate('tgl_lahir', $date2morrow)->select('name', 'phone')->get();
+    	$married = $married->whereDate('tgl_pernikahan', $date2morrow)->select('name', 'phone')->get();
+
+        return view('welcome', compact('result', 'forMark', 'url', 'ultah', 'married', 'date2morrow'));
     }
 
     public function index_new(Request $request){
@@ -46,8 +70,16 @@ class MemberController extends Controller
     }
 
     public function create(){
+    	//khusus untuk ultah dan married
+    	$members = Member::where('active', true);
+    	$ultah = $members;
+    	$married = $members;
+    	$date2morrow = date("Y-m-d", strtotime("+2 days"));
+    	$ultah = $ultah->whereDate('tgl_lahir', $date2morrow)->select('name', 'phone')->get();
+    	$married = $married->whereDate('tgl_pernikahan', $date2morrow)->select('name', 'phone')->get();
+
     	$subDistricts = RajaOngkir_Subdistrict::whereIn('province_id', [9,10,11])->get();
-        return view('add', compact('subDistricts'));
+        return view('add', compact('subDistricts', 'date2morrow', 'ultah', 'married'));
     }
 
     public function store(Request $request){

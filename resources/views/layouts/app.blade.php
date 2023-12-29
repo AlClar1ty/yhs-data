@@ -46,6 +46,8 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
+                        <li class="nav-item"><a class="nav-link {{ Route::currentRouteName() == 'index' ? 'active' : '' }}" href="{{ route('index') }}">Home</a></li>
+                        <li class="nav-item"><a class="nav-link {{ Route::currentRouteName() == 'create' ? 'active' : '' }}" href="{{ route('create') }}">Add Data</a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -56,6 +58,24 @@
                 </div>
             </div>
         </nav>
+
+        @if(isset($date2morrow))
+            <div class="px-1 bg-info">
+                <marquee class="pt-2" direction="left" onmouseover="this.stop()" onmouseout="this.start()">
+                    <p class="h4 mb-0 text-light">
+                        Birtday on {{ date("d F Y", strtotime($date2morrow)) }} ({{ count($ultah) > 0 ? count($ultah).') : ' : count($ultah).')' }} 
+                        @foreach($ultah as $perUltah)
+                            <a class="text-light" href="https://api.whatsapp.com/send/?phone={{ $perUltah['phone'] }}" target="_blank">{{ $perUltah['name'] }} - {{ $perUltah['phone'] }}</a>, 
+                        @endforeach
+                        ||
+                        Marriage on {{ date("d F Y", strtotime($date2morrow)) }} ({{ count($married) > 0 ? count($married).') : ' : count($married).')' }} 
+                        @foreach($married as $perMarried)
+                            <a class="text-light" href="https://api.whatsapp.com/send/?phone={{ $perMarried['phone'] }}" target="_blank">{{ $perMarried['name'] }} - {{ $perMarried['phone'] }}</a>, 
+                        @endforeach
+                    </p>
+                </marquee>
+            </div>
+        @endif
 
         <main class="py-4">
             @if (session('success'))
