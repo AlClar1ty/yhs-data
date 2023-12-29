@@ -254,77 +254,141 @@ class MemberController extends Controller
     }
 
     public function update(Request $request){
+    	// dd($request->all());
     	$dataNya = Member::find($request->input('id'));
         $parentNya = $dataNya->parent_member;
-        $childNya = $parentNya->child_member;
 
     	if($dataNya){
     		DB::beginTransaction();
 	        try{
-		    	//untuk suami
-		    	$data['name'] = $request->input('suami_name');
-		    	$data['type'] = "suami";
-		    	$data['gender'] = "pria";
-		    	$data['phone'] = $request->input('suami_phone');
-		    	$data['tempat_lahir'] = $request->input('suami_tmpt_lahir');
-		    	$data['tgl_lahir'] = $request->input('suami_tgl_lahir');
-		    	$data['tgl_pernikahan'] = $request->input('tgl_pernikahan');
-		    	$data['district_id'] = $request->input('district');
-		    	$data['alamat'] = $request->input('address');
+	        	if($parentNya['type'] == 'single'){
+		        	$data['name'] = $request->input('single_name');
+			    	$data['type'] = "single";
+			    	$data['gender'] = $request->input('single_gender');
+			    	$data['phone'] = $request->input('single_phone');
+			    	$data['is_baptis'] = $request->input('single_baptis');
+			    	$data['tempat_lahir'] = $request->input('single_tmpt_lahir');
+			    	$data['tgl_lahir'] = $request->input('single_tgl_lahir');
+			    	$data['district_id'] = $request->input('single_district');
+			    	$data['alamat'] = $request->input('single_address');
 
-		    	if ($request->hasFile('photo')) {
-	                $path = "sources/members";
-	                $file = $request->file('photo');
-	                $fileName = str_replace([' ', ':'], '', Carbon::now()->toDateTimeString()) . "_members." . $file->getClientOriginalExtension();
+			    	if ($request->hasFile('photo')) {
+		                $path = "sources/members";
+		                $file = $request->file('photo');
+		                $fileName = str_replace([' ', ':'], '', Carbon::now()->toDateTimeString()) . "_members." . $file->getClientOriginalExtension();
 
-	                // Cek ada folder tidak
-	                if (!is_dir($path)) {
-	                    File::makeDirectory($path, 0777, true, true);
-	                }
+		                // Cek ada folder tidak
+		                if (!is_dir($path)) {
+		                    File::makeDirectory($path, 0777, true, true);
+		                }
 
-	                // Hapus Img Lama Jika Update Image
-                    if (isset($parentNya['photo'])) {
-                        if (File::exists("sources/members/" . $parentNya['photo'])) {
-                            File::delete("sources/members/" . $parentNya['photo']);
-                        }
-                    }
+		                // Hapus Img Lama Jika Update Image
+	                    if (isset($parentNya['photo'])) {
+	                        if (File::exists("sources/members/" . $parentNya['photo'])) {
+	                            File::delete("sources/members/" . $parentNya['photo']);
+	                        }
+	                    }
 
-	                //compressed img
-	                $compres = Image::make($file->getRealPath());
-	                $compres->resize(720, null, function ($constraint) {
-	                    $constraint->aspectRatio();
-	                })->save($path.'/'.$fileName);
-			    	$data['photo'] = $fileName;
-	            }
+		                //compressed img
+		                $compres = Image::make($file->getRealPath());
+		                $compres->resize(720, null, function ($constraint) {
+		                    $constraint->aspectRatio();
+		                })->save($path.'/'.$fileName);
+				    	$data['photo'] = $fileName;
+		            }
 
-		    	$parentNya->update($data);
-		    	$data['photo'] = null;
+			    	$parentNya->update($data);
+	        	}
+	        	else{
+			        $childNya = $parentNya->child_member;
 
-		    	//untuk istri
-		    	$istri = $childNya->where('type', 'istri')->first();
-		    	$data['name'] = $request->input('istri_name');
-		    	$data['type'] = "istri";
-		    	$data['gender'] = "wanita";
-		    	$data['phone'] = $request->input('istri_phone');
-		    	$data['tempat_lahir'] = $request->input('istri_tmpt_lahir');
-		    	$data['tgl_lahir'] = $request->input('istri_tgl_lahir');
-		    	$data['member_id'] = $parentNya['id'];
-		    	$istri->update($data);
-		    	//untuk anak
-		    	foreach ($request->input('anak_name') as $key => $perAnak) {
-		    		if($perAnak != null){
-		    			$anak = $childNya->where('type', 'anak')[$key+1];
-				    	$data['name'] = $perAnak;
-				    	$data['type'] = "anak";
-				    	$data['gender'] = "wanita";
-				    	$data['phone'] = $request->input('anak_phone')[$key];
-				    	$data['tempat_lahir'] = $request->input('anak_tmpt_lahir')[$key];
-				    	$data['tgl_lahir'] = $request->input('anak_tgl_lahir')[$key];
-				    	$data['tgl_pernikahan'] = null;
-				    	$data['member_id'] = $parentNya['id'];
-				    	$anak->update($data);
-		    		}
-		    	}
+	        		//untuk suami
+			    	$data['name'] = $request->input('suami_name');
+			    	$data['type'] = "suami";
+			    	$data['gender'] = "pria";
+			    	$data['phone'] = $request->input('suami_phone');
+			    	$data['is_baptis'] = $request->input('suami_baptis');
+			    	$data['tempat_lahir'] = $request->input('suami_tmpt_lahir');
+			    	$data['tgl_lahir'] = $request->input('suami_tgl_lahir');
+			    	$data['tgl_pernikahan'] = $request->input('tgl_pernikahan');
+			    	$data['district_id'] = $request->input('district');
+			    	$data['alamat'] = $request->input('address');
+
+			    	if ($request->hasFile('photo')) {
+		                $path = "sources/members";
+		                $file = $request->file('photo');
+		                $fileName = str_replace([' ', ':'], '', Carbon::now()->toDateTimeString()) . "_members." . $file->getClientOriginalExtension();
+
+		                // Cek ada folder tidak
+		                if (!is_dir($path)) {
+		                    File::makeDirectory($path, 0777, true, true);
+		                }
+
+		                // Hapus Img Lama Jika Update Image
+	                    if (isset($parentNya['photo'])) {
+	                        if (File::exists("sources/members/" . $parentNya['photo'])) {
+	                            File::delete("sources/members/" . $parentNya['photo']);
+	                        }
+	                    }
+
+		                //compressed img
+		                $compres = Image::make($file->getRealPath());
+		                $compres->resize(720, null, function ($constraint) {
+		                    $constraint->aspectRatio();
+		                })->save($path.'/'.$fileName);
+				    	$data['photo'] = $fileName;
+		            }
+
+			    	$parentNya->update($data);
+			    	$data['photo'] = null;
+
+			    	//untuk istri
+			    	$istri = $childNya->where('type', 'istri')->first();
+			    	$data['name'] = $request->input('istri_name');
+			    	$data['type'] = "istri";
+			    	$data['gender'] = "wanita";
+			    	$data['phone'] = $request->input('istri_phone');
+			    	$data['is_baptis'] = $request->input('istri_baptis');
+			    	$data['tempat_lahir'] = $request->input('istri_tmpt_lahir');
+			    	$data['tgl_lahir'] = $request->input('istri_tgl_lahir');
+			    	$data['member_id'] = $parentNya['id'];
+			    	$istri->update($data);
+
+			    	//untuk anak
+			    	foreach ($request->input('anak_name') as $key => $perAnak) {
+			    		if($perAnak != null){
+			    			$data['name'] = $perAnak;
+					    	$data['type'] = "anak";
+
+					    	$data['gender'] = "pria";
+					    	if($request->has('anak_gender')){
+					    		if(isset($request->input('anak_gender')[$key])){
+							    	$data['gender'] = $request->input('anak_gender')[$key];
+					    		}
+					    	}
+					    	if($request->has('anak_baptis')){
+					    		if(isset($request->input('anak_baptis')[$key])){
+							    	$data['is_baptis'] = $request->input('anak_baptis')[$key];
+					    		}
+					    	}
+
+					    	$data['phone'] = $request->input('anak_phone')[$key];
+					    	$data['tempat_lahir'] = $request->input('anak_tmpt_lahir')[$key] != null ? $request->input('anak_tmpt_lahir')[$key] : "NaN";;
+					    	$data['tgl_lahir'] = $request->input('anak_tgl_lahir')[$key];
+					    	$data['tgl_pernikahan'] = null;
+					    	$data['member_id'] = $parentNya['id'];
+
+			    			if(isset($childNya->where('type', 'anak')[$key+1])){
+			    				$anak = $childNya->where('type', 'anak')[$key+1];
+						    	$anak->update($data);
+			    			}
+			    			else{
+						    	$anak = Member::create($data);
+			    			}
+			    			
+			    		}
+			    	}
+	        	}
 
 	            DB::commit();
 	            return redirect()->back()->with('success', 'Data Berhasil Di Ubah');
