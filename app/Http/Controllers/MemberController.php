@@ -59,7 +59,7 @@ class MemberController extends Controller
 	        $tempMark = $members;
 	        $forMark = $tempMark->pluck('id');
         }
-    	$result = $members->groupBy('member_id')->paginate(10);
+    	$result = $members->groupBy('member_id')->orderBy('id', 'desc')->paginate(10);
 
     	//khusus untuk ultah dan married
     	$date2morrow = date("Y-m-d", strtotime("+2 days"));
