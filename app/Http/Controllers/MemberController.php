@@ -393,7 +393,13 @@ class MemberController extends Controller
 			    			else{
 						    	$anak = Member::create($data);
 			    			}
-			    			
+			    		}
+			    		else{
+			    			if(isset($childNya->where('type', 'anak')[$key+1])){
+			    				$dataHapus['active'] = false;
+			    				$anak = $childNya->where('type', 'anak')[$key+1];
+						    	$anak->update($dataHapus);
+			    			}
 			    		}
 			    	}
 	        	}

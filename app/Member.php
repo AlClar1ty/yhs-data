@@ -17,7 +17,7 @@ class Member extends Model
 
     public function child_member()
     {
-        return $this->hasMany('App\Member')->where('id', '!=', $this->id);
+        return $this->hasMany('App\Member')->where('id', '!=', $this->id)->where('active', true);
     }
 
     public function district_detail(){
