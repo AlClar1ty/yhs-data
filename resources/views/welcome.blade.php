@@ -70,8 +70,7 @@
                         <tr>
                             <td class="text-center" >No.</td>
                             <td class="text-center" ></td>
-                            <td class="text-center" >Suami</td>
-                            <td class="text-center" >Istri</td>
+                            <td class="text-center" colspan="2">Data Member</td>
                             <td class="text-center" >Anak 1</td>
                             <td class="text-center" >Anak 2</td>
                             <td class="text-center" >Anak 3</td>
@@ -102,7 +101,7 @@
                                 $idxNum++;
                             @endphp
                             <tr style="border-top-style: double;">
-                                <td rowspan="4" style="vertical-align: middle; background-color: {{ $colorTable }};" class="font-weight-bold text-right">{{ $idxNum }}.</td>
+                                <td rowspan="5" style="vertical-align: middle; background-color: {{ $colorTable }};" class="font-weight-bold text-right">{{ $idxNum }}.</td>
                                 <td class="font-weight-bold text-right" style="background-color: {{ $colorTable }};">Nama</td>
                                 
                                 @php
@@ -116,7 +115,7 @@
                                         $colorTable = "#f1ffcf";
                                     }
                                 @endphp
-                                <td style="background-color: {{ $colorTable }};">{{ $parentNya['name'] }}</td>
+                                <td style="background-color: {{ $colorTable }};">{{ $parentNya['name'] }} ({{ $parentNya['type'] == 'single' ? ucfirst($parentNya['gender']) : "Suami" }})</td>
                                 
 
                                 @php
@@ -130,7 +129,7 @@
                                         $colorTable = "#f1ffcf";
                                     }
                                 @endphp
-                                <td style="background-color: {{ $colorTable }};">{{ $childNya->where('type', 'istri')->first() != null ? $childNya->where('type', 'istri')->first()['name'] : "" }}</td>
+                                <td style="background-color: {{ $colorTable }};">{{ $childNya->where('type', 'istri')->first() != null ? $childNya->where('type', 'istri')->first()['name'] . " (Istri)" : "" }}</td>
                                 @foreach($childNya->where('type', 'anak') as $anakNya)
 
                                     @php
@@ -144,7 +143,7 @@
                                             $colorTable = "#f1ffcf";
                                         }
                                     @endphp
-                                    <td style="background-color: {{ $colorTable }};">{{ $anakNya['name'] }}</td>
+                                    <td style="background-color: {{ $colorTable }};">{{ $anakNya['name'] }} ({{ ucfirst($anakNya['gender']) }})</td>
                                     @php
                                         $totAnak++;
                                         if($totAnak > 3){
@@ -173,9 +172,9 @@
                                         $colorTable = "#ffffff";
                                     }
                                 @endphp
-                                <td rowspan="4" style="vertical-align: middle; background-color: {{ $colorTable }};">{{ $parentNya->district_detail['province'] }}, {{ $parentNya->district_detail['city'] }}, {{ $parentNya->district_detail['subdistrict_name'] }} <br> {{ $parentNya['alamat'] }}</td>
+                                <td rowspan="5" style="vertical-align: middle; background-color: {{ $colorTable }};">{{ $parentNya->district_detail['province'] }}, {{ $parentNya->district_detail['city'] }}, {{ $parentNya->district_detail['subdistrict_name'] }} <br> {{ $parentNya['alamat'] }}</td>
 
-                                <td rowspan="4" style="text-align: center; vertical-align: middle;">
+                                <td rowspan="5" style="text-align: center; vertical-align: middle;">
                                     @if($parentNya['photo'])
                                         <a class="img-container" href="{{ asset("sources/members/". $parentNya['photo']) }}" target="_blank">
                                             <img src="{{ asset("sources/members/". $parentNya['photo']) }}" style="max-height: 12em;">
@@ -185,7 +184,7 @@
                                     @endif
                                 </td>
 
-                                <td rowspan="4" style="vertical-align: middle; background-color: {{ $colorTable }};" class="text-center">
+                                <td rowspan="5" style="vertical-align: middle; background-color: {{ $colorTable }};" class="text-center">
                                     <a href="{{ route('edit', ['id' => $parentNya['id']]) }}">
                                         <button class="btn btn-delete btn-sm">
                                             <i class="mdi mdi-border-color" style="font-size: 24px; color:#fed713;"></i>
@@ -281,7 +280,13 @@
                                         $colorTable = "#f1ffcf";
                                     }
                                 @endphp
-                                <td style="background-color: {{ $colorTable }};"><a href="https://api.whatsapp.com/send/?phone={{ $parentNya['phone'] }}" target="_blank" style="color: green;"><i class="mdi mdi-whatsapp"></i> {{ $parentNya['phone'] }}</a></td>
+                                <td style="background-color: {{ $colorTable }};">
+                                    @if(isset($parentNya['phone']))
+                                        <a href="https://api.whatsapp.com/send/?phone={{ $parentNya['phone'] }}" target="_blank" style="color: green;"><i class="mdi mdi-whatsapp"></i> 
+                                            {{ $parentNya['phone'] }}
+                                        </a>
+                                    @endif
+                                </td>
                                 
                                 @php
                                     if($isOdd%2 == 0){
@@ -294,7 +299,14 @@
                                         $colorTable = "#f1ffcf";
                                     }
                                 @endphp
-                                <td style="background-color: {{ $colorTable }};"><a href="https://api.whatsapp.com/send/?phone={{ $childNya->where('type', 'istri')->first() != null ? $childNya->where('type', 'istri')->first()['phone'] : "" }}" target="_blank" style="color: green;"><i class="mdi mdi-whatsapp"></i> {{ $childNya->where('type', 'istri')->first() != null ? $childNya->where('type', 'istri')->first()['phone'] : "" }} </a></td>
+                                <td style="background-color: {{ $colorTable }};">
+                                    @if($childNya->where('type', 'istri')->first() != null)
+                                        <a href="https://api.whatsapp.com/send/?phone={{ $childNya->where('type', 'istri')->first() != null ? $childNya->where('type', 'istri')->first()['phone'] : "" }}" target="_blank" style="color: green;"><i class="mdi mdi-whatsapp"></i> 
+                                            {{ $childNya->where('type', 'istri')->first() != null ? $childNya->where('type', 'istri')->first()['phone'] : "" }} 
+                                        </a>
+                                    @endif
+                                </td>
+
                                 @php
                                     $totAnak = 0;
                                 @endphp
@@ -312,7 +324,91 @@
                                             $colorTable = "#f1ffcf";
                                         }
                                     @endphp
-                                    <td style="background-color: {{ $colorTable }};"><a href="https://api.whatsapp.com/send/?phone={{ $anakNya['phone'] }}" target="_blank" style="color: green;"><i class="mdi mdi-whatsapp"></i>  {{ $anakNya['phone'] }} </a></td>
+                                    <td style="background-color: {{ $colorTable }};">
+                                        @if(isset($anakNya['phone']))
+                                            <a href="https://api.whatsapp.com/send/?phone={{ $anakNya['phone'] }}" target="_blank" style="color: green;"><i class="mdi mdi-whatsapp"></i>  {{ $anakNya['phone'] }} </a>
+                                        @endif
+                                    </td>
+
+                                    @php
+                                        $totAnak++;
+                                        if($totAnak > 3){
+                                            continue;
+                                        }
+                                    @endphp
+                                @endforeach
+
+                                @php
+                                    if($isOdd%2 == 0){
+                                        $colorTable = "#f1f7fd";
+                                    }
+                                    else{
+                                        $colorTable = "#ffffff";
+                                    }
+                                @endphp
+                                @for($i = $totAnak; $i < 3; $i++)
+                                    <td style="background-color: {{ $colorTable }};"></td>
+                                @endfor
+                            </tr>
+
+                            <tr>
+                                <td class="font-weight-bold text-right" style="background-color: {{ $colorTable }};">Status Baptis</td>
+
+                                @php
+                                    if($isOdd%2 == 0){
+                                        $colorTable = "#f1f7fd";
+                                    }
+                                    else{
+                                        $colorTable = "#ffffff";
+                                    }
+                                    if(in_array($parentNya['id'], json_decode(json_encode($forMark), true))){
+                                        $colorTable = "#f1ffcf";
+                                    }
+                                @endphp
+                                @if(isset($parentNya['is_baptis']))
+                                    <td style="background-color: {{ $colorTable }};">{!! $parentNya['is_baptis'] ? "<span class=\"text-success\">Sudah Baptis</span>" : "<span class=\"text-danger\">Belum Baptis</span>" !!}</td>
+                                @endif
+                                
+                                @php
+                                    if($isOdd%2 == 0){
+                                        $colorTable = "#f1f7fd";
+                                    }
+                                    else{
+                                        $colorTable = "#ffffff";
+                                    }
+                                    if(in_array($childNya->where('type', 'istri')->first()['id'], json_decode(json_encode($forMark), true))){
+                                        $colorTable = "#f1ffcf";
+                                    }
+                                @endphp
+                                <td style="background-color: {{ $colorTable }};"> 
+                                    @if($childNya->where('type', 'istri')->first() != null)
+                                        {!! $childNya->where('type', 'istri')->first() != null ? ($childNya->where('type', 'istri')->first()['is_baptis'] ? "<span class=\"text-success\">Sudah Baptis</span>" : "<span class=\"text-danger\">Belum Baptis</span>") : "" !!} 
+                                    @endif
+                                </td>
+
+                                @php
+                                    $totAnak = 0;
+                                @endphp
+
+                                @foreach($childNya->where('type', 'anak') as $anakNya)
+
+                                    @php
+                                        if($isOdd%2 == 0){
+                                            $colorTable = "#f1f7fd";
+                                        }
+                                        else{
+                                            $colorTable = "#ffffff";
+                                        }
+                                        if(in_array($anakNya['id'], json_decode(json_encode($forMark), true))){
+                                            $colorTable = "#f1ffcf";
+                                        }
+                                    @endphp
+                                    <td style="background-color: {{ $colorTable }};"> 
+                                        @if(isset($anakNya['is_baptis']))
+                                            {!! $anakNya['is_baptis'] ? "<span class=\"text-success\">Sudah Baptis</span>" : "<span class=\"text-danger\">Belum Baptis</span>" !!} 
+                                        @endif
+                                    </td>
+
                                     @php
                                         $totAnak++;
                                         if($totAnak > 3){
@@ -336,7 +432,7 @@
 
                             <tr>
                                 <td class="font-weight-bold text-right" style="background-color: {{ $colorTable }};">Tgl Pernikahan</td>
-                                <td colspan="2" class="text-center" style="background-color: {{ $colorTable }};">{{ date("d F Y", strtotime($parentNya['tgl_pernikahan'])) }}</td>
+                                <td colspan="2" class="text-center" style="background-color: {{ $colorTable }};">{{ isset($parentNya['tgl_pernikahan']) ? date("d F Y", strtotime($parentNya['tgl_pernikahan'])) : "Belum Menikah" }}</td>
                                 <td colspan="4" style="background-color: {{ $colorTable }};"></td>
                             </tr>
                         @endforeach

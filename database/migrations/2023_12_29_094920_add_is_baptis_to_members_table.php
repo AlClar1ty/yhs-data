@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ChangeTypeToMembersTable extends Migration
+class AddIsBaptisToMembersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class ChangeTypeToMembersTable extends Migration
     public function up()
     {
         Schema::table('members', function (Blueprint $table) {
-            $table->enum('type', ['suami', 'istri', 'anak'])->nullable()->change();
+            $table->boolean('is_baptis')->default(true);
         });
     }
 
@@ -26,7 +26,7 @@ class ChangeTypeToMembersTable extends Migration
     public function down()
     {
         Schema::table('members', function (Blueprint $table) {
-            $table->enum('type', ['suami', 'istri', 'anak'])->change();
+            $table->dropColumn('is_baptis');
         });
     }
 }
