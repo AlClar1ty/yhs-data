@@ -49,8 +49,10 @@ class MemberController extends Controller
 
     	//khusus untuk ultah dan married
     	$date2morrow = date("Y-m-d", strtotime("+2 days"));
-    	$ultah = $ultah->whereDate('tgl_lahir', $date2morrow)->select('name', 'phone')->get();
-    	$married = $married->whereDate('tgl_pernikahan', $date2morrow)->select('name', 'phone')->get();
+    	$date2morrow_m = date("m", strtotime("+2 days"));
+    	$date2morrow_d = date("d", strtotime("+2 days"));
+    	$ultah = $ultah->whereDay('tgl_lahir', $date2morrow_d)->whereMonth('tgl_lahir', $date2morrow_m)->select('name', 'phone')->get();
+    	$married = $married->whereDay('tgl_pernikahan', $date2morrow_d)->whereMonth('tgl_pernikahan', $date2morrow_m)->select('name', 'phone')->get();
 
         return view('welcome', compact('result', 'forMark', 'url', 'ultah', 'married', 'date2morrow', 'totMembers'));
     }
@@ -76,8 +78,10 @@ class MemberController extends Controller
     	$ultah = $members;
     	$married = $members;
     	$date2morrow = date("Y-m-d", strtotime("+2 days"));
-    	$ultah = $ultah->whereDate('tgl_lahir', $date2morrow)->select('name', 'phone')->get();
-    	$married = $married->whereDate('tgl_pernikahan', $date2morrow)->select('name', 'phone')->get();
+    	$date2morrow_m = date("m", strtotime("+2 days"));
+    	$date2morrow_d = date("d", strtotime("+2 days"));
+    	$ultah = $ultah->whereDay('tgl_lahir', $date2morrow_d)->whereMonth('tgl_lahir', $date2morrow_m)->select('name', 'phone')->get();
+    	$married = $married->whereDay('tgl_pernikahan', $date2morrow_d)->whereMonth('tgl_pernikahan', $date2morrow_m)->select('name', 'phone')->get();
 
     	$subDistricts = RajaOngkir_Subdistrict::whereIn('province_id', [9,10,11])->get();
         return view('add', compact('subDistricts', 'date2morrow', 'ultah', 'married'));
