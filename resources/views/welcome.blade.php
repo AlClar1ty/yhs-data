@@ -9,6 +9,19 @@
     .img-container:hover {
         opacity: 0.6;
     }
+
+    @media print {
+        div.divFooter {
+            position: fixed;
+            bottom: 0;
+        }
+        @page {
+            size: 8.5in 9in;
+            width: 210mm;
+            height: 297mm;
+            size: A4 landscape;
+        }
+    }
   </style>
 @endsection
 
@@ -62,6 +75,9 @@
                                 <div class="col-md-3 col-6">
                                     <a href="{{ route('index') }}"><button class="btn btn-danger w-100">Reset</button></a>
                                 </div>
+                                <div class="col-md-3 col-6">
+                                    <button id="btn-print" class="btn btn-warning w-100">Print</button>
+                                </div>
                             </div>
                         </div>
                         {{-- <div class="col-md-12 col-12 mb-3">
@@ -71,7 +87,7 @@
                 </div>
             </div>
 
-            <div class="table pt-2">
+            <div id="element-to-print" class="table pt-2">
                 <table class="table table-bordered" style="width: 190em;">
                     </thead>
                     <thead style="background-color: aliceblue; font-weight: 800;">
@@ -83,8 +99,8 @@
                             <td class="text-center" >Anak 2</td>
                             <td class="text-center" >Anak 3</td>
                             <td class="text-center" >Alamat</td>
-                            <td class="text-center" >Foto</td>
-                            <td class="text-center" >Edit/Delete</td>
+                            <td class="text-center on_print" >Foto</td>
+                            <td class="text-center on_print" >Edit/Delete</td>
                         </tr>                                
                     </thead>
                     <tbody>
@@ -182,7 +198,7 @@
                                 @endphp
                                 <td rowspan="5" style="vertical-align: middle; background-color: {{ $colorTable }};"><a href="https://www.google.com/maps/search/?api=1&query={{ str_replace(" ", "+", $parentNya['alamat']) }}" target="_blank">{{ $parentNya->district_detail['province'] }}, {{ $parentNya->district_detail['city'] }}, {{ $parentNya->district_detail['subdistrict_name'] }} <br> {{ $parentNya['alamat'] }}</a></td>
 
-                                <td rowspan="5" style="text-align: center; vertical-align: middle;">
+                                <td class="on_print" rowspan="5" style="text-align: center; vertical-align: middle;">
                                     @if($parentNya['photo'])
                                         <a class="img-container" href="{{ asset("sources/members/". $parentNya['photo']) }}" target="_blank">
                                             <img src="{{ asset("sources/members/". $parentNya['photo']) }}" style="max-height: 12em;">
@@ -192,7 +208,7 @@
                                     @endif
                                 </td>
 
-                                <td rowspan="5" style="vertical-align: middle; background-color: {{ $colorTable }};" class="text-center">
+                                <td class="on_print" rowspan="5" style="vertical-align: middle; background-color: {{ $colorTable }};" class="text-center">
                                     <a href="{{ route('edit', ['id' => $parentNya['id']]) }}">
                                         <button class="btn btn-delete btn-sm">
                                             <i class="mdi mdi-border-color" style="font-size: 24px; color:#fed713;"></i>
@@ -446,8 +462,8 @@
                         @endforeach
                     </tbody>
                 </table>
-                {!! $result->appends(\Request::except('page'))->render() !!}
             </div>
+                {!! $result->appends(\Request::except('page'))->render() !!}
         </div>
     </div>
 </div>
@@ -501,6 +517,17 @@
         $(".dropdown-date").click(function(e) {
             $("#btn-dropdown-date").html($(this).html());
             $("#search-date-type").val($(this).attr("data-value"));
+        });
+
+        $("#btn-print").click(function(e){
+            $(".on_print").hide();
+            var printContents = document.getElementById("element-to-print").innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+            $(".on_print").show();
+            return true;
         });
     });    
 
