@@ -16,6 +16,7 @@ class MemberController extends Controller
     	$url = $request->all();
     	$members = Member::where('active', true);
     	$totMembers = Member::where('active', true)->count();
+    	$totFamily = Member::where([['active', true], ['type', 'suami']])->count();
         $forMark = [];
 
         //search
@@ -49,7 +50,7 @@ class MemberController extends Controller
         }
     	if($request->has('search')){
     		if($request->input('search') != ""){
-	    		$members = $members->orWhere(function($q) use($request) {
+	    		$members = $members->Where(function($q) use($request) {
 		                $q->Where('name', 'like', '%' . $request->input('search') . '%')
 		                    ->orWhere('phone', 'like', '%' . $request->input('search') . '%');
 		            });
@@ -68,7 +69,7 @@ class MemberController extends Controller
     	$ultah = Member::where('active', true)->whereDay('tgl_lahir', $date2morrow_d)->whereMonth('tgl_lahir', $date2morrow_m)->select('name', 'phone')->get();
     	$married = Member::where('active', true)->whereDay('tgl_pernikahan', $date2morrow_d)->whereMonth('tgl_pernikahan', $date2morrow_m)->select('name', 'phone')->get();
 
-        return view('welcome', compact('result', 'forMark', 'url', 'ultah', 'married', 'date2morrow', 'totMembers'));
+        return view('welcome', compact('result', 'forMark', 'url', 'ultah', 'married', 'date2morrow', 'totMembers', 'totFamily'));
     }
 
     public function index_new(Request $request){
