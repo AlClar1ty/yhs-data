@@ -48,6 +48,11 @@ class MemberController extends Controller
 	    		$members = $members->where('is_baptis', $request->input('search_baptis'));
     		}
         }
+    	if($request->has('search_fb')){
+    		if($request->input('search_fb') != ""){
+	    		$members = $members->where('is_family_blessing', $request->input('search_fb'));
+    		}
+        }
     	if($request->has('search')){
     		if($request->input('search') != ""){
 	    		$members = $members->Where(function($q) use($request) {
@@ -56,18 +61,35 @@ class MemberController extends Controller
 		            });
     		}
         }
-        if($request->has('search-date') || $request->has('search') || $request->has('search_baptis')){
+        if($request->has('search-date') || $request->has('search') || $request->has('search_baptis') || $request->has('search_fb')){
 	        $tempMark = $members;
 	        $forMark = $tempMark->pluck('id');
         }
+
+        //khsusu untuk ultah dan married
+        if($request->has('find_id')){
+	    	$members = Member::where('id', $request->input('find_id'));
+	    	if($request->has('highlight_ultah_id')){
+		        $forMark = [$request->input('highlight_ultah_id')];
+	    	}
+	    	elseif($request->has('highlight_maried_id')){
+	    		$tempMark = $members;
+		        $forMark = [$request->input('highlight_maried_id')];
+		        if($tempMark->first()->child_member->where('type', 'istri')->first() != null){
+		        	$forMark[] = $tempMark->first()->child_member->where('type', 'istri')->first()['id'];
+		        }
+	    	}
+        }
+
+
     	$result = $members->groupBy('member_id')->orderBy('id', 'desc')->paginate(10);
 
     	//khusus untuk ultah dan married
     	$date2morrow = date("Y-m-d", strtotime("+2 days"));
     	$date2morrow_m = date("m", strtotime("+2 days"));
     	$date2morrow_d = date("d", strtotime("+2 days"));
-    	$ultah = Member::where('active', true)->whereDay('tgl_lahir', $date2morrow_d)->whereMonth('tgl_lahir', $date2morrow_m)->select('name', 'phone')->get();
-    	$married = Member::where('active', true)->whereDay('tgl_pernikahan', $date2morrow_d)->whereMonth('tgl_pernikahan', $date2morrow_m)->select('name', 'phone')->get();
+    	$ultah = Member::where('active', true)->whereDay('tgl_lahir', $date2morrow_d)->whereMonth('tgl_lahir', $date2morrow_m)->get();
+    	$married = Member::where([['active', true], ['type', 'suami']])->whereDay('tgl_pernikahan', $date2morrow_d)->whereMonth('tgl_pernikahan', $date2morrow_m)->get();
 
         return view('welcome', compact('result', 'forMark', 'url', 'ultah', 'married', 'date2morrow', 'totMembers', 'totFamily'));
     }
@@ -95,8 +117,8 @@ class MemberController extends Controller
     	$date2morrow = date("Y-m-d", strtotime("+2 days"));
     	$date2morrow_m = date("m", strtotime("+2 days"));
     	$date2morrow_d = date("d", strtotime("+2 days"));
-    	$ultah = $ultah->whereDay('tgl_lahir', $date2morrow_d)->whereMonth('tgl_lahir', $date2morrow_m)->select('name', 'phone')->get();
-    	$married = $married->whereDay('tgl_pernikahan', $date2morrow_d)->whereMonth('tgl_pernikahan', $date2morrow_m)->select('name', 'phone')->get();
+    	$ultah = Member::where('active', true)->whereDay('tgl_lahir', $date2morrow_d)->whereMonth('tgl_lahir', $date2morrow_m)->get();
+    	$married = Member::where([['active', true], ['type', 'suami']])->whereDay('tgl_pernikahan', $date2morrow_d)->whereMonth('tgl_pernikahan', $date2morrow_m)->get();
 
     	$subDistricts = RajaOngkir_Subdistrict::whereIn('province_id', [9,10,11])->get();
         return view('add', compact('subDistricts', 'date2morrow', 'ultah', 'married'));
@@ -112,6 +134,7 @@ class MemberController extends Controller
 		    	$data['gender'] = $request->input('single_gender');
 		    	$data['phone'] = $request->input('single_phone');
 		    	$data['is_baptis'] = $request->input('single_baptis');
+		    	$data['is_family_blessing'] = $request->input('single_fb');
 		    	$data['tempat_lahir'] = $request->input('single_tmpt_lahir');
 		    	$data['tgl_lahir'] = $request->input('single_tgl_lahir');
 		    	$data['district_id'] = $request->input('single_district');
@@ -134,9 +157,9 @@ class MemberController extends Controller
 	                    $constraint->aspectRatio();
 	                })->save($path.'/'.$fileName);
 			    	$resultData->photo = $fileName;
-			    	$resultData->member_id = $resultData['id'];
-			    	$resultData->update();
 	            }
+		    	$resultData->member_id = $resultData['id'];
+		    	$resultData->update();
         	}
         	else{
 				//untuk suami
@@ -145,6 +168,7 @@ class MemberController extends Controller
 		    	$data['gender'] = "pria";
 		    	$data['phone'] = $request->input('suami_phone');
 		    	$data['is_baptis'] = $request->input('suami_baptis');
+		    	$data['is_family_blessing'] = $request->input('suami_fb');
 		    	$data['tempat_lahir'] = $request->input('suami_tmpt_lahir');
 		    	$data['tgl_lahir'] = $request->input('suami_tgl_lahir');
 		    	$data['tgl_pernikahan'] = $request->input('tgl_pernikahan');
@@ -158,6 +182,7 @@ class MemberController extends Controller
 		    	$data['gender'] = "wanita";
 		    	$data['phone'] = $request->input('istri_phone');
 		    	$data['is_baptis'] = $request->input('istri_baptis');
+		    	$data['is_family_blessing'] = $request->input('istri_fb');
 		    	$data['tempat_lahir'] = $request->input('istri_tmpt_lahir');
 		    	$data['tgl_lahir'] = $request->input('istri_tgl_lahir');
 		    	$data['member_id'] = $suami['id'];
@@ -178,6 +203,11 @@ class MemberController extends Controller
 				    	if($request->has('anak_baptis')){
 				    		if(isset($request->input('anak_baptis')[$key])){
 						    	$data['is_baptis'] = $request->input('anak_baptis')[$key];
+				    		}
+				    	}
+				    	if($request->has('anak_fb')){
+				    		if(isset($request->input('anak_fb')[$key])){
+						    	$data['is_family_blessing'] = $request->input('anak_fb')[$key];
 				    		}
 				    	}
 
@@ -267,7 +297,17 @@ class MemberController extends Controller
     public function edit($id){
     	$subDistricts = RajaOngkir_Subdistrict::whereIn('province_id', [9,10,11])->get();
     	$dataNya = Member::find($id);
-        return view('update', compact('subDistricts', 'dataNya'));
+
+    	//khusus untuk ultah dan married
+    	$members = Member::where('active', true);
+    	$ultah = $members;
+    	$married = $members;
+    	$date2morrow = date("Y-m-d", strtotime("+2 days"));
+    	$date2morrow_m = date("m", strtotime("+2 days"));
+    	$date2morrow_d = date("d", strtotime("+2 days"));
+    	$ultah = Member::where('active', true)->whereDay('tgl_lahir', $date2morrow_d)->whereMonth('tgl_lahir', $date2morrow_m)->get();
+    	$married = Member::where([['active', true], ['type', 'suami']])->whereDay('tgl_pernikahan', $date2morrow_d)->whereMonth('tgl_pernikahan', $date2morrow_m)->get();
+        return view('update', compact('subDistricts', 'dataNya', 'date2morrow', 'ultah', 'married'));
     }
 
     public function update(Request $request){
@@ -284,6 +324,7 @@ class MemberController extends Controller
 			    	$data['gender'] = $request->input('single_gender');
 			    	$data['phone'] = $request->input('single_phone');
 			    	$data['is_baptis'] = $request->input('single_baptis');
+			    	$data['is_family_blessing'] = $request->input('single_fb');
 			    	$data['tempat_lahir'] = $request->input('single_tmpt_lahir');
 			    	$data['tgl_lahir'] = $request->input('single_tgl_lahir');
 			    	$data['district_id'] = $request->input('single_district');
@@ -325,6 +366,7 @@ class MemberController extends Controller
 			    	$data['gender'] = "pria";
 			    	$data['phone'] = $request->input('suami_phone');
 			    	$data['is_baptis'] = $request->input('suami_baptis');
+			    	$data['is_family_blessing'] = $request->input('suami_fb');
 			    	$data['tempat_lahir'] = $request->input('suami_tmpt_lahir');
 			    	$data['tgl_lahir'] = $request->input('suami_tgl_lahir');
 			    	$data['tgl_pernikahan'] = $request->input('tgl_pernikahan');
@@ -366,6 +408,7 @@ class MemberController extends Controller
 			    	$data['gender'] = "wanita";
 			    	$data['phone'] = $request->input('istri_phone');
 			    	$data['is_baptis'] = $request->input('istri_baptis');
+			    	$data['is_family_blessing'] = $request->input('istri_fb');
 			    	$data['tempat_lahir'] = $request->input('istri_tmpt_lahir');
 			    	$data['tgl_lahir'] = $request->input('istri_tgl_lahir');
 			    	$data['member_id'] = $parentNya['id'];
@@ -386,6 +429,11 @@ class MemberController extends Controller
 					    	if($request->has('anak_baptis')){
 					    		if(isset($request->input('anak_baptis')[$key])){
 							    	$data['is_baptis'] = $request->input('anak_baptis')[$key];
+					    		}
+					    	}
+					    	if($request->has('anak_fb')){
+					    		if(isset($request->input('anak_fb')[$key])){
+							    	$data['is_family_blessing'] = $request->input('anak_fb')[$key];
 					    		}
 					    	}
 

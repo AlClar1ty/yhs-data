@@ -66,18 +66,18 @@
             </div>
         </nav>
 
-        @if(isset($date2morrow))
+        @if(sizeof($ultah) > 0 || sizeof($married) > 0)
             <div class="px-1 bg-info">
                 <marquee class="pt-2" direction="left" onmouseover="this.stop()" onmouseout="this.start()">
                     <p class="h4 mb-0 text-light">
                         Birtday on {{ date("d F Y", strtotime($date2morrow)) }} ({{ count($ultah) > 0 ? count($ultah).') : ' : count($ultah).')' }} 
                         @foreach($ultah as $perUltah)
-                            <a class="text-light" href="https://api.whatsapp.com/send/?phone={{ $perUltah['phone'] }}" target="_blank">{{ $perUltah['name'] }} - {{ $perUltah['phone'] }}</a>, 
+                            <a class="text-light" href="{{ route('index') }}?find_id={{ $perUltah->parent_member['id'] }}&highlight_ultah_id={{ $perUltah['id'] }}">{{ $perUltah['name'] }} - {{ $perUltah['phone'] }}</a>, 
                         @endforeach
                         ||
                         Marriage on {{ date("d F Y", strtotime($date2morrow)) }} ({{ count($married) > 0 ? count($married).') : ' : count($married).')' }} 
                         @foreach($married as $perMarried)
-                            <a class="text-light" href="https://api.whatsapp.com/send/?phone={{ $perMarried['phone'] }}" target="_blank">{{ $perMarried['name'] }} - {{ $perMarried['phone'] }}</a>, 
+                            <a class="text-light" href="{{ route('index') }}?find_id={{ $perMarried->parent_member['id'] }}&highlight_maried_id={{ $perMarried['id'] }}">{{ $perMarried['name'] }} - {{ $perMarried['phone'] }}</a>, 
                         @endforeach
                     </p>
                 </marquee>

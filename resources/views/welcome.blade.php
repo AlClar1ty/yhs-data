@@ -43,7 +43,7 @@
                                     <label for="search-name-phone">Search by Name & Phone</label>
                                     <input id="search-name-phone" type="text" class="form-control" name="search" value="{{ isset($_GET['search']) ? $_GET['search'] : '' }}" placeholder="by Name and Phone" aria-label="Recipient's username" aria-describedby="basic-addon2">
                                 </div>
-                                <div class="form-group col-md-3 col-12">
+                                <div class="form-group col-md-2 col-12">
                                     <label for="search-baptis">Status Baptis</label>
                                     <select class="form-control" id="search-baptis" name="search_baptis" aria-label="">
                                         <option value="" selected="" disabled="">Pilih Baptis</option>
@@ -51,7 +51,15 @@
                                         <option value="0" {{ isset($_GET['search_baptis']) ? ($_GET['search_baptis'] == 0 ? "selected" : "") : '' }}>Belum Baptis</option>
                                     </select>
                                 </div>
-                                <div class="col-md-5 col-12">
+                                <div class="form-group col-md-2 col-12">
+                                    <label for="search-fb">Status FB</label>
+                                    <select class="form-control" id="search-fb" name="search_fb" aria-label="">
+                                        <option value="" selected="" disabled="">Pilih Status</option>
+                                        <option value="1" {{ isset($_GET['search_fb']) ? ($_GET['search_fb'] == 1 ? "selected" : "") : '' }}>Sudah FB</option>
+                                        <option value="0" {{ isset($_GET['search_fb']) ? ($_GET['search_fb'] == 0 ? "selected" : "") : '' }}>Belum Ikut FB</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 col-12">
                                     <label for="search-name-phone">Search by Birth/Marriage Date</label>
                                     <div class="input-group">
                                         <input type="hidden" name="search-date-type" id="search-date-type">
@@ -67,7 +75,7 @@
                                 </div>
                             </div>
                         </form>
-                        <div class="col-md-6 col-12">
+                        <div class="col-md-6 col-12 mt-2">
                             <div class="row">
                                 <div class="col-md-3 col-6">
                                     <button type="submit" form="searchForm" class="btn btn-info w-100">Search</button>
@@ -390,7 +398,10 @@
                                     }
                                 @endphp
                                 @if(isset($parentNya['is_baptis']))
-                                    <td style="background-color: {{ $colorTable }};">{!! $parentNya['is_baptis'] ? "<span class=\"text-success\">Sudah Baptis</span>" : "<span class=\"text-danger\">Belum Baptis</span>" !!}</td>
+                                    <td style="background-color: {{ $colorTable }};">
+                                        {!! $parentNya['is_baptis'] ? "<span class=\"text-success\">Sudah Baptis</span>" : "<span class=\"text-danger\">Belum Baptis</span>" !!}
+                                        {!! $parentNya['is_family_blessing'] ? "<span class=\"text-success\"> (Sudah FB)</span>" : "<span class=\"text-danger\"> (Belum Ikut FB)</span>" !!}
+                                    </td>
                                 @endif
                                 
                                 @php
@@ -406,7 +417,8 @@
                                 @endphp
                                 <td style="background-color: {{ $colorTable }};"> 
                                     @if($childNya->where('type', 'istri')->first() != null)
-                                        {!! $childNya->where('type', 'istri')->first() != null ? ($childNya->where('type', 'istri')->first()['is_baptis'] ? "<span class=\"text-success\">Sudah Baptis</span>" : "<span class=\"text-danger\">Belum Baptis</span>") : "" !!} 
+                                        {!! $childNya->where('type', 'istri')->first()['is_baptis'] ? "<span class=\"text-success\">Sudah Baptis</span>" : "<span class=\"text-danger\">Belum Baptis</span>" !!} 
+                                        {!! $childNya->where('type', 'istri')->first()['is_family_blessing'] ? "<span class=\"text-success\"> (Sudah FB)</span>" : "<span class=\"text-danger\"> (Belum Ikut FB)</span>" !!} 
                                     @endif
                                 </td>
 
@@ -427,9 +439,13 @@
                                             $colorTable = "#f1ffcf";
                                         }
                                     @endphp
-                                    <td style="background-color: {{ $colorTable }};"> 
+                                    <td style="background-color: {{ $colorTable }};">
                                         @if(isset($anakNya['is_baptis']))
                                             {!! $anakNya['is_baptis'] ? "<span class=\"text-success\">Sudah Baptis</span>" : "<span class=\"text-danger\">Belum Baptis</span>" !!} 
+                                        @endif
+
+                                        @if(isset($anakNya['is_family_blessing']))
+                                            {!! $anakNya['is_family_blessing'] ? "<span class=\"text-success\"> (Sudah FB)</span>" : "<span class=\"text-danger\"> (Belum Ikut FB)</span>" !!} 
                                         @endif
                                     </td>
 

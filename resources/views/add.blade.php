@@ -68,7 +68,7 @@
                                 </div>
                                 <div class="col-12">
                                     <div class="row">
-                                        <div class="form-group col-md-4 col-12">
+                                        <div class="form-group col-md-2 col-12">
                                             <label for="single_gender">Gender</label>
                                             <select class="form-control" id="single_gender" name="single_gender" aria-label="" required="">
                                                 <option value="" selected="" disabled="">Pilih Gender</option>
@@ -82,12 +82,21 @@
                                             <input type="tel" class="form-control" id="single_phone" name="single_phone" required="" placeholder="No. Telp">
                                         </div>
                                         
-                                        <div class="form-group col-md-4 col-12">
+                                        <div class="form-group col-md-3 col-12">
                                             <label for="single_baptis">Baptis</label>
                                             <select class="form-control" id="single_baptis" name="single_baptis" aria-label="" required="">
                                                 <option value="" selected="" disabled="">Pilih Baptis</option>
                                                 <option value="1">Sudah</option>
                                                 <option value="0">Belum Baptis</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group col-md-3 col-12">
+                                            <label for="single_fb">Status FB</label>
+                                            <select class="form-control" id="single_fb" name="single_fb" aria-label="" required="">
+                                                <option value="" selected="" disabled="">Pilih Status FB</option>
+                                                <option value="1">Sudah FB</option>
+                                                <option value="0">Belum Ikut FB</option>
                                             </select>
                                         </div>
                                     </div>
@@ -127,24 +136,33 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
+                                <div class="form-group col-12">
+                                    <label for="suami_name">Nama Suami</label>
+                                    <input type="text" class="form-control need_required" id="suami_name" name="suami_name" required="" placeholder="Nama">
+                                </div>
+
                                 <div class="col-12">
                                     <div class="row">
                                         <div class="form-group col-md-6 col-12">
-                                            <label for="suami_name">Nama Suami</label>
-                                            <input type="text" class="form-control need_required" id="suami_name" name="suami_name" required="" placeholder="Nama">
-                                        </div>
-
-                                        <div class="form-group col-md-4 col-12">
                                             <label for="suami_phone">No. Telp Suami</label>
                                             <input type="tel" class="form-control need_required" id="suami_phone" name="suami_phone" required="" placeholder="No. Telp">
                                         </div>
                                         
-                                        <div class="form-group col-md-2 col-12">
+                                        <div class="form-group col-md-3 col-12">
                                             <label for="suami_baptis">Baptis</label>
                                             <select class="form-control need_required" id="suami_baptis" name="suami_baptis" aria-label="" required="">
                                                 <option value="" selected="" disabled="">Pilih Baptis</option>
                                                 <option value="1">Sudah</option>
                                                 <option value="0">Belum Baptis</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group col-md-3 col-12">
+                                            <label for="suami_fb">Status FB</label>
+                                            <select class="form-control" id="suami_fb" name="suami_fb" aria-label="" required="">
+                                                <option value="" selected="" disabled="">Pilih Status FB</option>
+                                                <option value="1">Sudah FB</option>
+                                                <option value="0">Belum Ikut FB</option>
                                             </select>
                                         </div>
                                     </div>
@@ -169,24 +187,33 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
+                                <div class="form-group col-12">
+                                    <label for="istri_name">Nama Istri</label>
+                                    <input type="text" class="form-control need_required" id="istri_name" name="istri_name" placeholder="Nama">
+                                </div>
+
                                 <div class="col-12">
                                     <div class="row">
                                         <div class="form-group col-md-6 col-12">
-                                            <label for="istri_name">Nama Istri</label>
-                                            <input type="text" class="form-control need_required" id="istri_name" name="istri_name" placeholder="Nama">
-                                        </div>
-
-                                        <div class="form-group col-md-4 col-12">
                                             <label for="istri_phone">No. Telp Istri</label>
                                             <input type="text" class="form-control need_required" id="istri_phone" name="istri_phone" placeholder="No. Telp">
                                         </div>
 
-                                        <div class="form-group col-md-2 col-12">
+                                        <div class="form-group col-md-3 col-12">
                                             <label for="istri_baptis">Baptis</label>
                                             <select class="form-control need_required" id="istri_baptis" name="istri_baptis" aria-label="">
                                                 <option value="" selected="" disabled="">Pilih Baptis</option>
                                                 <option value="1">Sudah</option>
                                                 <option value="0">Belum Baptis</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group col-md-3 col-12">
+                                            <label for="istri_fb">Status FB</label>
+                                            <select class="form-control" id="istri_fb" name="istri_fb" aria-label="" required="">
+                                                <option value="" selected="" disabled="">Pilih Status FB</option>
+                                                <option value="1">Sudah FB</option>
+                                                <option value="0">Belum Ikut FB</option>
                                             </select>
                                         </div>
                                     </div>
@@ -246,7 +273,7 @@
 
                                     <div class="col-12">
                                         <div class="row">
-                                            <div class="form-group col-md-4 col-12">
+                                            <div class="form-group col-md-2 col-12">
                                                 <label for="anak_gender_{{ $i }}">Gender</label>
                                                 <select class="form-control" id="anak_gender_{{ $i }}" name="anak_gender[]" aria-label="">
                                                     <option value="" selected="" disabled="">Pilih Gender</option>
@@ -260,12 +287,21 @@
                                                 <input type="text" class="form-control" id="anak_phone_{{ $i }}" name="anak_phone[]" placeholder="No. Telp">
                                             </div>
                                             
-                                            <div class="form-group col-md-4 col-12">
+                                            <div class="form-group col-md-3 col-12">
                                                 <label for="anak_baptis_{{ $i }}">Baptis</label>
                                                 <select class="form-control" id="anak_baptis_{{ $i }}" name="anak_baptis[]" aria-label="">
                                                     <option value="" selected="" disabled="">Pilih Baptis</option>
                                                     <option value="1">Sudah</option>
                                                     <option value="0">Belum Baptis</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group col-md-3 col-12">
+                                                <label for="anak_fb_{{ $i }}">Status FB</label>
+                                                <select class="form-control" id="anak_fb_{{ $i }}" name="anak_fb[]" aria-label="" required="">
+                                                    <option value="" selected="" disabled="">Pilih Status FB</option>
+                                                    <option value="1">Sudah FB</option>
+                                                    <option value="0">Belum Ikut FB</option>
                                                 </select>
                                             </div>
                                         </div>

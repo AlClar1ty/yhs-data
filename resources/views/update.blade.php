@@ -48,24 +48,33 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
+                                <div class="form-group col-12">
+                                    <label for="suami_name">Nama Suami</label>
+                                    <input type="text" class="form-control" id="suami_name" name="suami_name" required="" placeholder="Nama" value="{{ $dataNya['name'] }}">
+                                </div>
+
                                 <div class="col-12">
                                     <div class="row">
                                         <div class="form-group col-md-6 col-12">
-                                            <label for="suami_name">Nama Suami</label>
-                                            <input type="text" class="form-control" id="suami_name" name="suami_name" required="" placeholder="Nama" value="{{ $dataNya['name'] }}">
-                                        </div>
-
-                                        <div class="form-group col-md-4 col-12">
                                             <label for="suami_phone">No. Telp Suami</label>
                                             <input type="tel" class="form-control" id="suami_phone" name="suami_phone" required="" placeholder="No. Telp" value="{{ $dataNya['phone'] }}">
                                         </div>
                                         
-                                        <div class="form-group col-md-2 col-12">
+                                        <div class="form-group col-md-3 col-12">
                                             <label for="suami_baptis">Baptis</label>
                                             <select class="form-control need_required" id="suami_baptis" name="suami_baptis" aria-label="" required="">
                                                 <option value="" disabled="">Pilih Baptis</option>
                                                 <option value="1" {{ $dataNya['is_baptis'] == 1 ? "selected" : "" }}>Sudah</option>
                                                 <option value="0" {{ $dataNya['is_baptis'] == 0 ? "selected" : "" }}>Belum Baptis</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group col-md-3 col-12">
+                                            <label for="suami_fb">Status FB</label>
+                                            <select class="form-control" id="suami_fb" name="suami_fb" aria-label="" required="">
+                                                <option value="" selected="" disabled="">Pilih Status FB</option>
+                                                <option value="1" {{ $dataNya['is_family_blessing'] == 1 ? "selected" : "" }}>Sudah FB</option>
+                                                <option value="0" {{ $dataNya['is_family_blessing'] == 0 ? "selected" : "" }}>Belum Ikut FB</option>
                                             </select>
                                         </div>
                                     </div>
@@ -95,14 +104,14 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
+                                <div class="form-group col-12">
+                                    <label for="istri_name">Nama Istri</label>
+                                    <input type="text" class="form-control" id="istri_name" name="istri_name" required="" placeholder="Nama" value="{{ $childNya->where('type', 'istri')->first() != null ? $childNya->where('type', 'istri')->first()['name'] : "" }}">
+                                </div>
+
                                 <div class="col-12">
                                     <div class="row">
                                         <div class="form-group col-md-6 col-12">
-                                            <label for="istri_name">Nama Istri</label>
-                                            <input type="text" class="form-control" id="istri_name" name="istri_name" required="" placeholder="Nama" value="{{ $childNya->where('type', 'istri')->first() != null ? $childNya->where('type', 'istri')->first()['name'] : "" }}">
-                                        </div>
-
-                                        <div class="form-group col-md-4 col-12">
                                             <label for="istri_phone">No. Telp Istri</label>
                                             <input type="text" class="form-control" id="istri_phone" name="istri_phone" required="" placeholder="No. Telp" value="{{ $childNya->where('type', 'istri')->first() != null ? $childNya->where('type', 'istri')->first()['phone'] : "" }}">
                                         </div>
@@ -112,13 +121,27 @@
                                             if($childNya->where('type', 'istri')->first() != null){
                                                 $istri_is_baptis = $childNya->where('type', 'istri')->first()['is_baptis'];
                                             }
+
+                                            $istri_is_fb = 0;
+                                            if($childNya->where('type', 'istri')->first() != null){
+                                                $istri_is_fb = $childNya->where('type', 'istri')->first()['is_family_blessing'];
+                                            }
                                         @endphp
-                                        <div class="form-group col-md-2 col-12">
+                                        <div class="form-group col-md-3 col-12">
                                             <label for="istri_baptis">Baptis</label>
                                             <select class="form-control" id="istri_baptis" name="istri_baptis" aria-label="" required="">
                                                 <option value="" disabled="">Pilih Baptis</option>
                                                 <option value="1" {{ $istri_is_baptis == 1 ? "selected" : "" }}>Sudah</option>
                                                 <option value="0" {{ $istri_is_baptis == 0 ? "selected" : "" }}>Belum Baptis</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group col-md-3 col-12">
+                                            <label for="istri_fb">Status FB</label>
+                                            <select class="form-control" id="istri_fb" name="istri_fb" aria-label="">
+                                                <option value="" selected="" disabled="">Pilih Status FB</option>
+                                                <option value="1" {{ $istri_is_fb == 1 ? "selected" : "" }}>Sudah FB</option>
+                                                <option value="0" {{ $istri_is_fb == 0 ? "selected" : "" }}>Belum Ikut FB</option>
                                             </select>
                                         </div>
                                     </div>
@@ -181,13 +204,15 @@
                                             @php
                                                 $anak_gender = "";
                                                 $anak_baptis = "2";
+                                                $anak_fb = "2";
                                                 if(isset($childNya->where('type', 'anak')[$i])){
                                                     $anak_gender = $childNya->where('type', 'anak')[$i]['gender'];
                                                     $anak_baptis = $childNya->where('type', 'anak')[$i]['is_baptis'];
+                                                    $anak_fb = $childNya->where('type', 'anak')[$i]['is_family_blessing'];
                                                 }
                                             @endphp
 
-                                            <div class="form-group col-md-4 col-12">
+                                            <div class="form-group col-md-2 col-12">
                                                 <label for="anak_gender_{{ $i }}">Gender</label>
                                                 <select class="form-control" id="anak_gender_{{ $i }}" name="anak_gender[]" aria-label="">
                                                     <option value="" selected="" disabled="">Pilih Gender</option>
@@ -201,14 +226,23 @@
                                                 <input type="text" class="form-control" id="anak_phone_{{ $i }}" name="anak_phone[]" placeholder="No. Telp" value="{{ isset($childNya->where('type', 'anak')[$i]) ? $childNya->where('type', 'anak')[$i]['phone'] : "" }}">
                                             </div>
                                                 
-                                            <div class="form-group col-md-4 col-12">
+                                            <div class="form-group col-md-3 col-12">
                                                 <label for="anak_baptis_{{ $i }}">Baptis</label>
                                                 <select class="form-control" id="anak_baptis_{{ $i }}" name="anak_baptis[]" aria-label="">
                                                     <option value="" selected="" disabled="">Pilih Baptis</option>
                                                     <option value="1" {{ $anak_baptis == 1 ? "selected" : "" }}>Sudah</option>
                                                     <option value="0" {{ $anak_baptis == 0 ? "selected" : "" }}>Belum Baptis</option>
                                                 </select>
-                                            </div>                                        
+                                            </div> 
+
+                                            <div class="form-group col-md-3 col-12">
+                                                <label for="anak_fb_{{ $i }}">Status FB</label>
+                                                <select class="form-control" id="anak_fb_{{ $i }}" name="anak_fb[]" aria-label="">
+                                                    <option value="" selected="" disabled="">Pilih Status FB</option>
+                                                    <option value="1" {{ $anak_fb == 1 ? "selected" : "" }}>Sudah FB</option>
+                                                    <option value="0" {{ $anak_fb == 0 ? "selected" : "" }}>Belum Ikut FB</option>
+                                                </select>
+                                            </div>                                       
                                         </div>
                                         <div class="row">
                                             <div class="form-group col-md-6 col-12">
@@ -281,7 +315,7 @@
                                 </div>
                                 <div class="col-12">
                                     <div class="row">
-                                        <div class="form-group col-md-4 col-12">
+                                        <div class="form-group col-md-2 col-12">
                                             <label for="single_gender">Gender</label>
                                             <select class="form-control" id="single_gender" name="single_gender" aria-label="" required="">
                                                 <option value="" selected="" disabled="">Pilih Gender</option>
@@ -295,12 +329,21 @@
                                             <input type="tel" class="form-control" id="single_phone" name="single_phone" required="" placeholder="No. Telp" value="{{ $dataNya['phone'] }}">
                                         </div>
                                         
-                                        <div class="form-group col-md-4 col-12">
+                                        <div class="form-group col-md-3 col-12">
                                             <label for="single_baptis">Baptis</label>
                                             <select class="form-control" id="single_baptis" name="single_baptis" aria-label="" required="">
                                                 <option value="" selected="" disabled="">Pilih Baptis</option>
                                                 <option value="1" {{ $dataNya['is_baptis'] == 1 ? "selected" : "" }}>Sudah</option>
                                                 <option value="0" {{ $dataNya['is_baptis'] == 0 ? "selected" : "" }}>Belum Baptis</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group col-md-3 col-12">
+                                            <label for="single_fb">Status FB</label>
+                                            <select class="form-control" id="single_fb" name="single_fb" aria-label="" required="">
+                                                <option value="" selected="" disabled="">Pilih Status FB</option>
+                                                <option value="1" {{ $dataNya['is_family_blessing'] == 1 ? "selected" : "" }}>Sudah FB</option>
+                                                <option value="0" {{ $dataNya['is_family_blessing'] == 0 ? "selected" : "" }}>Belum Ikut FB</option>
                                             </select>
                                         </div>
                                     </div>
