@@ -17,7 +17,7 @@ jobs:
         server: 154.41.240.225
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
-        server-dir: /../laravel_yhs_data/
+        server-dir: /domains/yhschurchsurabaya.com/laravel_yhs_data/
         exclude: public/**
           - public/
           - .git*
@@ -33,7 +33,7 @@ jobs:
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
         local-dir: ./public/
-        server-dir: /../public_html/
+        server-dir: /domains/yhschurchsurabaya.com/public_html/
         exclude: .htaccess
           - credentials.json
           - favicon.ico
