@@ -14,10 +14,10 @@ jobs:
     - name: 📂 Sync files Laravel
       uses: SamKirkland/FTP-Deploy-Action@4.0.0
       with:
-        server: 45.90.228.88
+        server: 154.41.240.225
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
-        server-dir: /../laravel_yhs/
+        server-dir: /../laravel_yhs_data/
         exclude: public/**
           - public/
           - .git*
@@ -29,11 +29,11 @@ jobs:
     - name: 📂 Sync files public
       uses: SamKirkland/FTP-Deploy-Action@4.0.0
       with:
-        server: 45.90.228.88
+        server: 154.41.240.225
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
         local-dir: ./public/
-        server-dir: /../public_html/yhs/
+        server-dir: /../public_html/
         exclude: .htaccess
           - credentials.json
           - favicon.ico
