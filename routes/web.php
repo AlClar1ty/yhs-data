@@ -10,11 +10,16 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
-Route::get('/', 'MemberController@index')->name('index');
-Route::get('/list', 'MemberController@index_new')->name('index_new');
-Route::get('/create', 'MemberController@create')->name('create');
-Route::post('/store', 'MemberController@store')->name('store');
-Route::get('/edit/{id}', 'MemberController@edit')->name('edit');
-Route::post('/update', 'MemberController@update')->name('update');
-Route::post('/delete', 'MemberController@destroy')->name('destroy');
+Auth::routes();
+Route::group( ['middleware' => 'auth' ], function(){
+	Route::get('/', 'MemberController@index')->name('index');
+	Route::get('/create', 'MemberController@create')->name('create');
+	Route::post('/store', 'MemberController@store')->name('store');
+	Route::get('/edit/{id}', 'MemberController@edit')->name('edit');
+	Route::post('/update', 'MemberController@update')->name('update');
+	Route::post('/delete', 'MemberController@destroy')->name('destroy');
+});
+
