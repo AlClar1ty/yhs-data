@@ -23,4 +23,8 @@ class Member extends Model
     public function district_detail(){
         return $this->belongsTo('App\RajaOngkir_Subdistrict', 'district_id', 'id');
     }
+
+    public function pastor(){
+        return $this->hasOne('App\Pastor');
+    }
 }

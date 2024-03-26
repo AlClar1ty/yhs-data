@@ -54,7 +54,34 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item"><a class="nav-link {{ Route::currentRouteName() == 'index' ? 'active' : '' }}" href="{{ route('index') }}">Home</a></li>
-                        <li class="nav-item"><a class="nav-link {{ Route::currentRouteName() == 'create' ? 'active' : '' }}" href="{{ route('create') }}">Add Data</a></li>
+                        <li class="nav-item"><a class="nav-link {{ Route::currentRouteName() == 'create' ? 'active' : '' }}" href="{{ route('create') }}">Add Member</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {{ (Route::currentRouteName() == 'wedding_list' || Route::currentRouteName() == 'wedding_create') ? 'active' : '' }}" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+                                Wedding Bless
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item {{ Route::currentRouteName() == 'wedding_create' ? 'disabled' : '' }}" href="{{ Route::currentRouteName() == 'wedding_create' ? '#' : route('wedding_create') }}">Add Wedding Bless</a>
+                                <a class="dropdown-item {{ Route::currentRouteName() == 'wedding_list' ? 'disabled' : '' }}" href="{{ Route::currentRouteName() == 'wedding_list' ? '#' : route('wedding_list') }}">List Wedding Bless</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {{ (Route::currentRouteName() == 'baptism_list' || Route::currentRouteName() == 'baptism_create') ? 'active' : '' }}" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+                                Baptism
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item {{ Route::currentRouteName() == 'baptism_create' ? 'disabled' : '' }}" href="{{ Route::currentRouteName() == 'baptism_create' ? '#' : route('baptism_create') }}">Add Baptism</a>
+                                <a class="dropdown-item {{ Route::currentRouteName() == 'baptism_list' ? 'disabled' : '' }}" href="{{ Route::currentRouteName() == 'baptism_list' ? '#' : route('baptism_list') }}">List Baptism</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {{ (Route::currentRouteName() == 'pastor_list' || Route::currentRouteName() == 'pastor_create') ? 'active' : '' }}" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+                                Pastors
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item {{ Route::currentRouteName() == 'pastor_create' ? 'disabled' : '' }}" href="{{ Route::currentRouteName() == 'pastor_create' ? '#' : route('pastor_create') }}">Add Pastor</a>
+                                <a class="dropdown-item" href="{{ route('pastor_list') }}">List Pastor</a>
+                            </div>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -69,22 +96,24 @@
             </div>
         </nav>
 
-        @if(sizeof($ultah) > 0 || sizeof($married) > 0)
-            <div class="px-1 bg-info">
-                <marquee class="pt-2" direction="left" onmouseover="this.stop()" onmouseout="this.start()">
-                    <p class="h4 mb-0 text-light">
-                        Birtday on {{ date("d F Y", strtotime($date2morrow)) }} ({{ count($ultah) > 0 ? count($ultah).') : ' : count($ultah).')' }} 
-                        @foreach($ultah as $perUltah)
-                            <a class="text-light" href="{{ route('index') }}?find_id={{ $perUltah->parent_member['id'] }}&highlight_ultah_id={{ $perUltah['id'] }}">{{ $perUltah['name'] }} - {{ $perUltah['phone'] }}</a>, 
-                        @endforeach
-                        ||
-                        Marriage on {{ date("d F Y", strtotime($date2morrow)) }} ({{ count($married) > 0 ? count($married).') : ' : count($married).')' }} 
-                        @foreach($married as $perMarried)
-                            <a class="text-light" href="{{ route('index') }}?find_id={{ $perMarried->parent_member['id'] }}&highlight_maried_id={{ $perMarried['id'] }}">{{ $perMarried['name'] }} - {{ $perMarried['phone'] }}</a>, 
-                        @endforeach
-                    </p>
-                </marquee>
-            </div>
+        @if(isset($ultah) && isset($married))
+            @if(sizeof($ultah) > 0 || sizeof($married) > 0)
+                <div class="px-1 bg-info">
+                    <marquee class="pt-2" direction="left" onmouseover="this.stop()" onmouseout="this.start()">
+                        <p class="h4 mb-0 text-light">
+                            Birtday on {{ date("d F Y", strtotime($date2morrow)) }} ({{ count($ultah) > 0 ? count($ultah).') : ' : count($ultah).')' }} 
+                            @foreach($ultah as $perUltah)
+                                <a class="text-light" href="{{ route('index') }}?find_id={{ $perUltah->parent_member['id'] }}&highlight_ultah_id={{ $perUltah['id'] }}">{{ $perUltah['name'] }} - {{ $perUltah['phone'] }}</a>, 
+                            @endforeach
+                            ||
+                            Marriage on {{ date("d F Y", strtotime($date2morrow)) }} ({{ count($married) > 0 ? count($married).') : ' : count($married).')' }} 
+                            @foreach($married as $perMarried)
+                                <a class="text-light" href="{{ route('index') }}?find_id={{ $perMarried->parent_member['id'] }}&highlight_maried_id={{ $perMarried['id'] }}">{{ $perMarried['name'] }} - {{ $perMarried['phone'] }}</a>, 
+                            @endforeach
+                        </p>
+                    </marquee>
+                </div>
+            @endif
         @endif
 
         <main class="py-4">

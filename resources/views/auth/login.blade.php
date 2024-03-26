@@ -103,6 +103,7 @@
 
                                 <form class="pt-3" method="POST" action="{{ route('login') }}">
                                     @csrf
+                                    <input type="hidden" name="remember" value="1">
                                     <div class="form-group">
                                         <input id="email" type="email" placeholder="Email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required>
                                         @if ($errors->has('email'))

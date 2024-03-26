@@ -69,7 +69,7 @@ class LoginController extends Controller
             return $this->sendLockoutResponse($request);
         }
 
-        if ($this->attemptLogin($request, true)) {
+        if ($this->attemptLogin($request)) {
             return $this->sendLoginResponse($request);
         }
 
